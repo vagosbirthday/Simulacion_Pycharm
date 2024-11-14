@@ -8,7 +8,7 @@ relojPrincipal = pygame.time.Clock()
 ANCHOVENTANA = 600
 ALTURAVENTANA = 400
 superficieVentana = pygame.display.set_mode((ANCHOVENTANA, ALTURAVENTANA), 0, 32)
-pygame.display.set_caption('Simulación de Almacén')
+pygame.display.set_caption('Simulación de Almacen')
 
 NEGRO = (0, 0, 0)
 VERDE = (0, 255, 0)
@@ -23,30 +23,25 @@ TAMAÑOSTANTE = 80
 robot = pygame.Rect(50, 50, TAMAÑOROBOT, TAMAÑOROBOT)
 formas = ["cuadrado", "circulo", "triangulo"]
 cajaEnMano = None
-contadorCajasDejadas = 0  # Inicializamos el contador de cajas dejadas
+contadorCajasDejadas = 0  
 
-# Crear los estantes específicos para cada forma con coordenadas
 estanteCuadrado = pygame.Rect(ANCHOVENTANA - 100, 50, TAMAÑOSTANTE, TAMAÑOSTANTE)
 estanteCirculo = pygame.Rect(ANCHOVENTANA - 100, ALTURAVENTANA - 150, TAMAÑOSTANTE, TAMAÑOSTANTE)
 estanteTriangulo = pygame.Rect(50, ALTURAVENTANA - 150, TAMAÑOSTANTE, TAMAÑOSTANTE)
 
-# Crear múltiples cajas de cada forma en posiciones aleatorias
 cajas = [{"rect": pygame.Rect(random.randint(0, ANCHOVENTANA - TAMAÑOCAJA),
                               random.randint(0, ALTURAVENTANA - TAMAÑOCAJA),
                               TAMAÑOCAJA, TAMAÑOCAJA),
-          "forma": random.choice(formas)} for _ in range(5)]  # Genera 5 cajas
+          "forma": random.choice(formas)} for _ in range(5)]  
 
-# Variables de movimiento
 moverseIzquierda = False
 moverseDerecha = False
 moverseArriba = False
 moverseAbajo = False
 VELOCIDADMOVIMIENTO = 5
 
-# Fuente para el contador
 fuente = pygame.font.SysFont(None, 36)
 
-# Bucle principal del juego
 while True:
     for evento in pygame.event.get():
         if evento.type == QUIT:
@@ -71,7 +66,6 @@ while True:
             if evento.key == K_DOWN:
                 moverseAbajo = False
 
-            # Agarrar y soltar cajas
             if evento.key == ord('a') and cajaEnMano is None:
                 for caja in cajas:
                     if robot.colliderect(caja["rect"]):
@@ -79,7 +73,6 @@ while True:
                         cajas.remove(caja)
                         break
             if evento.key == ord('d') and cajaEnMano is not None:
-                # Verificar si la caja en mano está en el estante correcto
                 if cajaEnMano["forma"] == "cuadrado" and robot.colliderect(estanteCuadrado):
                     cajaEnMano["rect"].center = estanteCuadrado.center
                     contadorCajasDejadas += 1
@@ -119,20 +112,17 @@ while True:
 
     superficieVentana.fill(NEGRO)
 
-    # Dibujar estantes en las formas correspondientes
-    pygame.draw.rect(superficieVentana, AZUL, estanteCuadrado)  # Estante para cuadrado
-    pygame.draw.ellipse(superficieVentana, AZUL, estanteCirculo)  # Estante para círculo
+    pygame.draw.rect(superficieVentana, AZUL, estanteCuadrado)  
+    pygame.draw.ellipse(superficieVentana, AZUL, estanteCirculo)  
     puntosTriangulo = [
         (estanteTriangulo.centerx, estanteTriangulo.top),
         (estanteTriangulo.bottomleft),
         (estanteTriangulo.bottomright)
     ]
-    pygame.draw.polygon(superficieVentana, AZUL, puntosTriangulo)  # Estante para triángulo
+    pygame.draw.polygon(superficieVentana, AZUL, puntosTriangulo) 
 
-    # Dibujar el robot
     pygame.draw.rect(superficieVentana, BLANCO, robot)
 
-    # Dibujar las cajas
     for caja in cajas:
         if caja["forma"] == "cuadrado":
             pygame.draw.rect(superficieVentana, VERDE, caja["rect"])
@@ -146,7 +136,6 @@ while True:
             ]
             pygame.draw.polygon(superficieVentana, VERDE, puntos)
 
-    # Dibujar la caja en mano si existe
     if cajaEnMano is not None:
         if cajaEnMano["forma"] == "cuadrado":
             pygame.draw.rect(superficieVentana, ROJO, cajaEnMano["rect"])
